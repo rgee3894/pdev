@@ -5,8 +5,22 @@
 #include "sampleobject.h"
 #include "archive.h"
 
+void fileSystemExample();
+void reflectionExample();
+void archiveExample();
+
+int main()
+{
+	fileSystemExample();
+	reflectionExample();
+	archiveExample();
+    return 0;
+}
+
 void fileSystemExample()
 {
+	std::cout << "FILE SYSTEM EXAMPLE" << std::endl;
+	std::cout << "======================================================" << std::endl;
 	StandardFileSystem* fs = new StandardFileSystem("D:/test");
 
 	// If newfile.txt exists, delete it
@@ -51,6 +65,8 @@ void fileSystemExample()
 	}
 	// Close the file
 	delete openedFile;
+	std::cout << "======================================================" << std::endl;
+
 }
 
 void showVars(const SampleObject& obj)
@@ -82,7 +98,7 @@ void showVars(const SampleObject& obj)
 		std::cout << "  MyDoubleVariable = " << doubleVar << std::endl;
 	else
 		std::cout << "  Cannot read MyDoubleVariable" << std::endl;
-	
+
 	if (obj.getMemberArray("MyArray", intArray, 12))
 	{
 		std::cout << "  MyArray = {";
@@ -99,6 +115,9 @@ void showVars(const SampleObject& obj)
 
 void reflectionExample()
 {
+	std::cout << "REFLECTION EXAMPLE" << std::endl;
+	std::cout << "======================================================" << std::endl;
+
 	SampleObject obj;
 	const TypeDesc& typeDesc = SampleObject::staticTypeDescription();
 	// List member variables of SampleObject
@@ -115,7 +134,7 @@ void reflectionExample()
 	obj.m_MyDoubleVariable = 3.0;
 	for (int i = 0; i < 12; i++)
 		obj.m_MyArray[i] = i;
-	
+
 	// Print out variables
 	showVars(obj);
 
@@ -145,25 +164,75 @@ void reflectionExample()
 	SampleObject newObj;
 	//newObj.Load(fs, "sampleObj.dat");
 	showVars(newObj);
+	std::cout << "======================================================" << std::endl;
 }
 
 void archiveExample()
 {
-	// Create/open a new archive file
-	Archive newArchive;
-	newArchive.openArchive("D:/test/newfile.archive");
-	const char fileContents[] = "Hello Archive!";
-	newArchive.writeFile("test.txt", fileContents, strlen(fileContents) + 1);
+	std::cout << "ARCHIVE EXAMPLE" << std::endl;
+	std::cout << "======================================================" << std::endl;
 
-	const char fileContents[] = "Hello Archive!";
-	newArchive.writeFile("test.txt", fileContents, strlen(fileContents) + 1);
-	// Read the written file
-	newArchive.readFile()
-}
-int main()
-{
-	//fileSystemExample();
-	reflectionExample();
-    return 0;
+	// Create/open a new archive file
+	{
+		Archive newArchive;
+		newArchive.openArchive("D:/test/newfile.archive");
+		{
+			// Write "Hello Archive!" to test1.txt
+			const char fileContents[] = "Hello Archive!";
+			newArchive.writeFile("test1.txt", fileContents, strlen(fileContents) + 1);
+		}
+		{
+			// Write "Test2 Hello!" to test2.txt
+			const char fileContents[] = "Test2 Hello!";
+			newArchive.writeFile("test2.txt", fileContents, strlen(fileContents) + 1);
+		}
+		{
+			// Write "Test3 Hello!" to test3.txt
+			const char fileContents[] = "Test3 Hello!";
+			newArchive.writeFile("test3.txt", fileContents, strlen(fileContents) + 1);
+		}
+		newArchive.close();
+	}
+	{
+		Archive archive;
+		archive.openArchive("D:/test/newfile.archive");
+		// Read the written files
+
+		// Read "test1.txt"
+		Archive::ArchiveFileBuffer* file1 = archive.readFile("test1.txt");
+		if (file1)
+			std::cout << "test1.txt contents: " << file1->buffer() << std::endl;
+		else
+			std::cout << "Cannot read test1.txt!" << std::endl;
+		delete file1;
+
+		// Read "test2.txt"
+		Archive::ArchiveFileBuffer* file2 = archive.readFile("test2.txt");
+		if (file2)
+			std::cout << "test2.txt contents: " << file2->buffer() << std::endl;
+		else
+			std::cout << "Cannot read test2.txt!" << std::endl;
+		delete file2;
+
+		// Read "test3.txt"
+		Archive::ArchiveFileBuffer* file3 = archive.readFile("test3.txt");
+		if (file3)
+			std::cout << "test3.txt contents: " << file3->buffer() << std::endl;
+		else
+			std::cout << "Cannot read test3.txt!" << std::endl;
+		delete file3;
+
+		// Test file deletion
+		archive.deleteFile("test3.txt");
+		if (!archive.fileExists("test3.txt"))
+            std::cout << "test3.txt does not exist anymore" << std::endl;
+        else
+            std::cout << "test3.txt is still there!" << std::endl;
+
+		// Test archive compaction
+		archive.compact();
+		archive.close();
+	}
+	std::cout << "======================================================" << std::endl;
 }
 

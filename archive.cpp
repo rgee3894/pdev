@@ -30,6 +30,10 @@ Archive::~Archive()
 
 bool Archive::openArchive(const char * filename)
 {
+	if (m_fileHandle)
+	{
+		return false;
+	}
 	struct stat st;
 	int result = stat(filename, &st);
 	if (result == 0)
@@ -74,10 +78,29 @@ bool Archive::openArchive(const char * filename)
 		m_header.m_magic = 0xabcd1234;
 		m_header.m_version = 1;
 		m_header.m_numFiles = 0;
+		if (FWRITE(&m_header, sizeof(ArchiveHeader), 1, m_fileHandle) != 1)
+		{
+			FCLOSE(m_fileHandle);
+			m_fileHandle = nullptr;
+			return false;
+		}
 		m_fileInfos.clear();
 		m_currentEnd = sizeof(m_header);
 	}
+	m_archiveFile = filename;
 	return true;
+}
+
+void Archive::close()
+{
+	if (!m_fileHandle)
+		return;
+	FCLOSE(m_fileHandle);
+	m_fileHandle = nullptr;
+	m_fileInfos.clear();
+	m_header = { 0 };
+	m_currentEnd = 0;
+	m_archiveFile = "";
 }
 
 Archive::ArchiveFileBuffer * Archive::readFile(const char * filename)
@@ -157,12 +180,98 @@ bool Archive::writeFile(const char * filename, const char * buffer, int64_t size
 	if (m_currentEnd == newOffset)
 		m_currentEnd += size;
 
+	return updateHeaderAndTables();
+}
+
+bool Archive::deleteFile(const char* filename)
+{
+	if (!m_fileHandle) return false;
+
+	// Find the file entry for this file
+	for (auto iter = m_fileInfos.begin(); iter != m_fileInfos.end(); ++iter)
+	{
+		FileInfo& inf = *iter;
+		if (!strcmp(inf.m_filename, filename))
+		{
+			m_fileInfos.erase(iter);
+			return updateHeaderAndTables();
+		}
+	}
+	return false;
+}
+
+bool Archive::updateHeaderAndTables()
+{
 	// Write the updated file table
 	FSEEK(m_fileHandle, m_currentEnd, SEEK_SET);
 	if (FWRITE(&m_fileInfos[0], sizeof(FileInfo), m_fileInfos.size(), m_fileHandle) != m_fileInfos.size())
 	{
 		return false;
 	}
+	// Update the header
+	FSEEK(m_fileHandle, 0, SEEK_SET);
+	m_header.m_numFiles = m_fileInfos.size();
+	if (FWRITE(&m_header, sizeof(ArchiveHeader), 1, m_fileHandle) != 1)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool Archive::compact()
+{
+	if (m_fileHandle == nullptr)
+		return false;
+
+	// Read all files into memory and update their offsets
+	std::vector<ArchiveFileBuffer*> buffers;
+	std::vector<FileInfo> newInfos;
+	buffers.reserve(m_fileInfos.size());
+	newInfos.reserve(m_fileInfos.size());
+	int64_t currentOffset = sizeof(ArchiveHeader);
+	for (FileInfo& info : m_fileInfos)
+	{
+		ArchiveFileBuffer* buf = readFile(info.m_filename);
+		if (!buf)
+			return false;
+		buffers.push_back(buf);
+		info.m_fileOffset = currentOffset;
+		currentOffset += info.m_size;
+	}
+	
+	// Close the old file and delete
+	FCLOSE(m_fileHandle);
+	remove(m_archiveFile.c_str());
+	
+	// Create a new file and re-write everything
+	m_fileHandle = FOPEN(m_archiveFile.c_str(), "w+b");
+
+	if (!m_fileHandle)
+		return false;
+
+	// Rewrite everything to disk
+	if (FSEEK(m_fileHandle, 0, SEEK_SET) != 0)
+		return false;
+
+	// Rewrite header
+	if (FWRITE(&m_header, sizeof(ArchiveHeader), 1, m_fileHandle) != 1)
+		return false;
+
+	// Rewrite file data
+	for (ArchiveFileBuffer* buf : buffers)
+	{
+		if (FWRITE(buf->buffer(), 1, buf->size(), m_fileHandle) != buf->size())
+			return false;
+	}
+	m_currentEnd = FTELL(m_fileHandle);
+	// Rewrite file table
+	if (FWRITE(&m_fileInfos[0], sizeof(FileInfo), m_fileInfos.size(), m_fileHandle) != m_fileInfos.size())
+		return false;
+
+	// Delete buffers
+	for (ArchiveFileBuffer* buf : buffers)
+		delete buf;
+
 	return true;
 }
 
@@ -180,3 +289,4 @@ bool Archive::fileExists(const char * filename)
 	}
 	return false;
 }
+
