@@ -24,6 +24,9 @@
     <ClCompile Include="prosdevassignment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="archive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="filesystem.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sampleobject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="archive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

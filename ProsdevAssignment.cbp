@@ -36,6 +36,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="archive.cpp" />
+		<Unit filename="archive.h" />
 		<Unit filename="filesystem.h" />
 		<Unit filename="prosdevassignment.cpp" />
 		<Unit filename="reflection.h" />

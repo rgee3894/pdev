@@ -142,11 +142,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="archive.cpp" />
     <ClCompile Include="prosdevassignment.cpp" />
     <ClCompile Include="sampleobject.cpp" />
     <ClCompile Include="standardfilesystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="archive.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="reflection.h" />
     <ClInclude Include="sampleobject.h" />

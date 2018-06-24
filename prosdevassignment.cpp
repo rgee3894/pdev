@@ -3,6 +3,7 @@
 #include "standardfilesystem.h"
 #include "reflection.h"
 #include "sampleobject.h"
+#include "archive.h"
 
 void fileSystemExample()
 {
@@ -146,6 +147,19 @@ void reflectionExample()
 	showVars(newObj);
 }
 
+void archiveExample()
+{
+	// Create/open a new archive file
+	Archive newArchive;
+	newArchive.openArchive("D:/test/newfile.archive");
+	const char fileContents[] = "Hello Archive!";
+	newArchive.writeFile("test.txt", fileContents, strlen(fileContents) + 1);
+
+	const char fileContents[] = "Hello Archive!";
+	newArchive.writeFile("test.txt", fileContents, strlen(fileContents) + 1);
+	// Read the written file
+	newArchive.readFile()
+}
 int main()
 {
 	//fileSystemExample();
