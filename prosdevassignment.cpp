@@ -156,13 +156,13 @@ void reflectionExample()
 
 	// Test Save
 	std::cout << "Testing Save..." << std::endl;
-	//StandardFileSystem fs("D:/test");
-	//obj.Save(fs, "sampleObj.dat");
+	StandardFileSystem fs("./");
+	obj.Save(fs, "sampleObj.dat");
 
 	// Test Load
 	std::cout << "Testing Load..." << std::endl;
 	SampleObject newObj;
-	//newObj.Load(fs, "sampleObj.dat");
+	newObj.Load(fs, "sampleObj.dat");
 	showVars(newObj);
 	std::cout << "======================================================" << std::endl;
 }
