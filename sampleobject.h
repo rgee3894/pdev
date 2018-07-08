@@ -20,6 +20,15 @@
 
 */
 
+struct Employee
+{
+	public: int EmpId = 0;
+	public: bool IsHired = false;
+	public: float GPA = 0.0;
+	public: double Salary = 0.0;
+	public: int ContactNos [12] = { 0 };
+};
+
 class SampleObject : public ReflectionObject
 {
 // BEGIN: Generated from SampleObject.definition
@@ -27,11 +36,11 @@ public:
 	SampleObject();
 	~SampleObject();
 
-	int m_MyIntVariable;
-	bool m_MyBoolVariable;
-	float m_MyFloatVariable;
-	double m_MyDoubleVariable;
-	int m_MyArray[12];
+	int intvar;
+	bool boolvar;
+	float floatvar;
+	double doublevar;
+	int arrayvar[12];
 
 	const TypeDesc& typeDescription() const override { return s_Desc; }
 	static const TypeDesc& staticTypeDescription() { return s_Desc; }
