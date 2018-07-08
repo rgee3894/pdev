@@ -1,10 +1,11 @@
 
 // BEGIN: Generated from SampleObject.definition
 #include "sampleobject.h"
+#include "standardfilesystem.h"
 
 SampleObject::SampleObjectTypeDesc SampleObject::s_Desc;
 
-SampleObject::SampleObjectTypeDesc::SampleObjectTypeDesc() 
+SampleObject::SampleObjectTypeDesc::SampleObjectTypeDesc()
 {
 	m_name = "SampleObject";
 	m_memberDesc.push_back(MemberDesc("MyIntVariable", Type_Int, 1, offsetof(SampleObject, m_MyIntVariable)));
@@ -30,4 +31,24 @@ void SampleObject::myCustomFunction()
 {
 	std::cout << "Custom Function!" << std::endl;
 }
-// END: Custom Code 
+// END: Custom Code
+
+void SampleObject::Load(StandardFileSystem* fs, char * fileName)
+{
+    IFile* openedFile = fs->openFile(fileName);
+    if (!openedFile)
+	{
+		std::cout << "Failed to open file" << std::endl;
+	}
+	size_t size = openedFile->length();
+	char* destBuffer = new char[size];
+	if (!openedFile->read(destBuffer, size))
+	{
+		std::cout << "Failed to read from file!" << std::endl;
+	}
+	else
+	{
+		std::cout << "File Contents:" << std::endl;
+		std::cout << destBuffer << std::endl;
+	}
+}

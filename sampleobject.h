@@ -48,6 +48,7 @@ private:
 public:
 
 	void myCustomFunction();
+	void Load(StandardFileSystem* fs, char * fileName);
 // END: Custom Code
 
 };
