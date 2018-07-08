@@ -49,7 +49,7 @@ private:
 public:
 
 	void myCustomFunction();
-	void Load(StandardFileSystem fs, char * fileName);
+	void Load(StandardFileSystem fs, const char* fileName);
 	void Save(StandardFileSystem fs, const char* fileName);
 // END: Custom Code
 

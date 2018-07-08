@@ -2,6 +2,7 @@
 // BEGIN: Generated from SampleObject.definition
 #include "sampleobject.h"
 #include "standardfilesystem.h"
+#include "string.h"
 
 SampleObject::SampleObjectTypeDesc SampleObject::s_Desc;
 
@@ -33,24 +34,68 @@ void SampleObject::myCustomFunction()
 }
 // END: Custom Code
 
-void SampleObject::Load(StandardFileSystem* fs, char * fileName)
+void SampleObject::Load(StandardFileSystem fs, const char* fileName)
 {
-    IFile* openedFile = fs->openFile(fileName);
+    IFile* openedFile = fs.openFile(fileName);
     if (!openedFile)
-	{
+    {
 		std::cout << "Failed to open file" << std::endl;
+		return;
 	}
+
+	int intVar;
+	bool boolVar;
+	float floatVar;
+	double doubleVar;
+	int intArray[12];
+
 	size_t size = openedFile->length();
 	char* destBuffer = new char[size];
+	char * ptr;
+
+    //Reading file contents into buffer
 	if (!openedFile->read(destBuffer, size))
 	{
 		std::cout << "Failed to read from file!" << std::endl;
+		return;
 	}
-	else
-	{
-		std::cout << "File Contents:" << std::endl;
-		std::cout << destBuffer << std::endl;
-	}
+    const char delim[4] = "\n";
+    const char intArrDelim[4] = ", ";
+
+    /*Reading from buffer */
+
+    //Reading int variable
+    ptr = strtok(destBuffer,delim);
+    intVar = std::stoi(ptr);
+
+    //Reading bool variable
+    ptr=strtok(NULL,delim);
+    char * boolString = ptr;
+
+    //Reading float variable
+    ptr=strtok(NULL,delim);
+    floatVar = std::stof(ptr);
+
+    //Reading double variable
+    ptr=strtok(NULL,delim);
+    doubleVar = std::stod(ptr);
+
+    //Reading int array
+    ptr=strtok(NULL,delim);
+    char* intArr = ptr;
+
+    ptr = strtok(intArr, intArrDelim);
+    for(int i = 0; i < sizeof(intArray)/sizeof(int); i++)
+    {
+        intArray[i] = std::stoi(ptr);
+        ptr = strtok(NULL, intArrDelim);
+    }
+    //Setting the member values
+    this->setMemberValue("MyIntVariable", intVar);
+	this->setMemberValue("MyBoolVariable", boolVar);
+	this->setMemberValue("MyFloatVariable", floatVar);
+	this->setMemberValue("MyDoubleVariable", doubleVar);
+	this->setMemberArray("MyArray", intArray, 12);
 }
 
 void SampleObject::Save(StandardFileSystem fs, const char* fileName)
@@ -89,7 +134,7 @@ void SampleObject::Save(StandardFileSystem fs, const char* fileName)
 
 	for (int i = 0; i < 12; i++)
 	{
-		objectValues += std::to_string(intArray[i]); 
+		objectValues += std::to_string(intArray[i]);
 
 		if (i != 11)
 		{
@@ -107,4 +152,4 @@ void SampleObject::Save(StandardFileSystem fs, const char* fileName)
 	delete createdFile;
 	std::cout << "Successfully saved file as " << fileName << std::endl;
 }
-// END: Custom Code 
+// END: Custom Code
