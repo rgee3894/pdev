@@ -14,6 +14,7 @@ int main()
 	fileSystemExample();
 	reflectionExample();
 	archiveExample();
+	system("PAUSE");
     return 0;
 }
 
@@ -21,7 +22,7 @@ void fileSystemExample()
 {
 	std::cout << "FILE SYSTEM EXAMPLE" << std::endl;
 	std::cout << "======================================================" << std::endl;
-	StandardFileSystem* fs = new StandardFileSystem("D:/test");
+	StandardFileSystem* fs = new StandardFileSystem("C:\\Users\\Marl\\Documents\\PROSDEV\\pdev");
 
 	// If newfile.txt exists, delete it
 	if (fs->fileExists("newfile.txt"))
@@ -66,7 +67,6 @@ void fileSystemExample()
 	// Close the file
 	delete openedFile;
 	std::cout << "======================================================" << std::endl;
-
 }
 
 void showVars(const SampleObject& obj)
@@ -79,29 +79,29 @@ void showVars(const SampleObject& obj)
 	double doubleVar;
 	int intArray[12];
 
-	if (obj.getMemberValue("MyIntVariable", intVar))
-		std::cout << "  MyIntVariable = " << intVar << std::endl;
+	if (obj.getMemberValue("EmpId", intVar))
+		std::cout << "  EmpId = " << intVar << std::endl;
 	else
-		std::cout << "  Cannot read MyIntVariable" << std::endl;
+		std::cout << "  Cannot read EmpId" << std::endl;
 
-	if (obj.getMemberValue("MyBoolVariable", boolVar))
-		std::cout << "  MyBoolVariable = " << (boolVar ? "true" : "false") << std::endl;
+	if (obj.getMemberValue("IsHired", boolVar))
+		std::cout << "  IsHired = " << (boolVar ? "true" : "false") << std::endl;
 	else
-		std::cout << "  Cannot read MyBoolVariable" << std::endl;
+		std::cout << "  Cannot read IsHired" << std::endl;
 
-	if (obj.getMemberValue("MyFloatVariable", floatVar))
-		std::cout << "  MyFloatVariable = " << floatVar << std::endl;
+	if (obj.getMemberValue("GPA", floatVar))
+		std::cout << "  GPA = " << floatVar << std::endl;
 	else
-		std::cout << "  Cannot read MyFloatVariable" << std::endl;
+		std::cout << "  Cannot read GPA" << std::endl;
 
-	if (obj.getMemberValue("MyDoubleVariable", doubleVar))
-		std::cout << "  MyDoubleVariable = " << doubleVar << std::endl;
+	if (obj.getMemberValue("Salary", doubleVar))
+		std::cout << "  Salary = " << doubleVar << std::endl;
 	else
-		std::cout << "  Cannot read MyDoubleVariable" << std::endl;
+		std::cout << "  Cannot read Salary" << std::endl;
 
-	if (obj.getMemberArray("MyArray", intArray, 12))
+	if (obj.getMemberArray("ContactNos", intArray, 12))
 	{
-		std::cout << "  MyArray = {";
+		std::cout << "  ContactNos = {";
 		for (int i = 0; i < 12; i++)
 		{
 			std::cout << " " << intArray[i] << " ";
@@ -109,7 +109,7 @@ void showVars(const SampleObject& obj)
 		std::cout << "}" << std::endl;
 	}
 	else
-		std::cout << "  Cannot read MyArray" << std::endl;
+		std::cout << "  Cannot read ContactNos" << std::endl;
 
 }
 
@@ -128,12 +128,12 @@ void reflectionExample()
 	}
 	std::cout << std::endl;
 	// Set variables directly
-	obj.m_MyIntVariable = 0;
-	obj.m_MyBoolVariable = true;
-	obj.m_MyFloatVariable = 2.0f;
-	obj.m_MyDoubleVariable = 3.0;
+	obj.intvar = 0;
+	obj.boolvar = true;
+	obj.floatvar = 2.0f;
+	obj.doublevar = 3.0;
 	for (int i = 0; i < 12; i++)
-		obj.m_MyArray[i] = i;
+		obj.arrayvar[i] = i;
 
 	// Print out variables
 	showVars(obj);
@@ -141,15 +141,15 @@ void reflectionExample()
 	std::cout << std::endl;
 
 	// Set variables using accessors
-	obj.setMemberValue("MyIntVariable", 12);
-	obj.setMemberValue("MyBoolVariable", false);
-	obj.setMemberValue("MyFloatVariable", 23.0f);
-	obj.setMemberValue("MyDoubleVariable", 10.0);
+	obj.setMemberValue("EmpId", 12);
+	obj.setMemberValue("IsHired", false);
+	obj.setMemberValue("GPA", 23.0f);
+	obj.setMemberValue("Salary", 10.0);
 
 	int tempArray[12];
 	for (int i = 0; i < 12; i++)
 		tempArray[i] = 11 - i;
-	obj.setMemberArray("MyArray", tempArray, 12);
+	obj.setMemberArray("ContactNos", tempArray, 12);
 	// Print out variables
 	showVars(obj);
 	std::cout << std::endl;
@@ -175,7 +175,7 @@ void archiveExample()
 	// Create/open a new archive file
 	{
 		Archive newArchive;
-		newArchive.openArchive("D:/test/newfile.archive");
+		newArchive.openArchive("C:\\Users\\Marl\\Documents\\PROSDEV\\pdev");
 		{
 			// Write "Hello Archive!" to test1.txt
 			const char fileContents[] = "Hello Archive!";
@@ -195,7 +195,7 @@ void archiveExample()
 	}
 	{
 		Archive archive;
-		archive.openArchive("D:/test/newfile.archive");
+		archive.openArchive("C:\\Users\\Marl\\Documents\\PROSDEV\\pdev");
 		// Read the written files
 
 		// Read "test1.txt"

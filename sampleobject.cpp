@@ -6,15 +6,15 @@ SampleObject::SampleObjectTypeDesc SampleObject::s_Desc;
 
 SampleObject::SampleObjectTypeDesc::SampleObjectTypeDesc() 
 {
-	m_name = "SampleObject";
-	m_memberDesc.push_back(MemberDesc("MyIntVariable", Type_Int, 1, offsetof(SampleObject, m_MyIntVariable)));
-	m_memberDesc.push_back(MemberDesc("MyBoolVariable", Type_Bool, 1, offsetof(SampleObject, m_MyBoolVariable)));
-	m_memberDesc.push_back(MemberDesc("MyFloatVariable", Type_Float, 1, offsetof(SampleObject, m_MyFloatVariable)));
-	m_memberDesc.push_back(MemberDesc("MyDoubleVariable", Type_Double, 1, offsetof(SampleObject, m_MyDoubleVariable)));
-	m_memberDesc.push_back(MemberDesc("MyArray", Type_Int, 12, offsetof(SampleObject, m_MyArray)));
+	m_name = "Employee";
+	m_memberDesc.push_back(MemberDesc("EmpId", Type_Int, 1, offsetof(SampleObject, intvar)));
+	m_memberDesc.push_back(MemberDesc("IsHired", Type_Bool, 1, offsetof(SampleObject, boolvar)));
+	m_memberDesc.push_back(MemberDesc("GPA", Type_Float, 1, offsetof(SampleObject, floatvar)));
+	m_memberDesc.push_back(MemberDesc("Salary", Type_Double, 1, offsetof(SampleObject, doublevar)));
+	m_memberDesc.push_back(MemberDesc("ContactNos", Type_Int, 12, offsetof(SampleObject, arrayvar)));
 }
 
-SampleObject::SampleObject() : m_MyIntVariable(0), m_MyBoolVariable(false), m_MyFloatVariable(0.0f), m_MyDoubleVariable(0.0), m_MyArray{0}
+SampleObject::SampleObject() : intvar(0), boolvar(false), floatvar(0.0f), doublevar(0.0), arrayvar{0}
 {
 }
 
