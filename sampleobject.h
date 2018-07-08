@@ -19,7 +19,7 @@
 	}
 
 */
-
+/*
 struct Employee
 {
 	public: int EmpId = 0;
@@ -28,6 +28,7 @@ struct Employee
 	public: double Salary = 0.0;
 	public: int ContactNos [12] = { 0 };
 };
+*/
 
 class SampleObject : public ReflectionObject
 {
