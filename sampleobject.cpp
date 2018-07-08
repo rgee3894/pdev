@@ -96,6 +96,7 @@ void SampleObject::Load(StandardFileSystem fs, const char* fileName)
 	this->setMemberValue("MyFloatVariable", floatVar);
 	this->setMemberValue("MyDoubleVariable", doubleVar);
 	this->setMemberArray("MyArray", intArray, 12);
+	delete openedFile; //Close the file
 }
 
 void SampleObject::Save(StandardFileSystem fs, const char* fileName)
