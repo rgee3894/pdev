@@ -91,11 +91,11 @@ void SampleObject::Load(StandardFileSystem fs, const char* fileName)
         ptr = strtok(NULL, intArrDelim);
     }
     //Setting the member values
-    this->setMemberValue("MyIntVariable", intVar);
-	this->setMemberValue("MyBoolVariable", boolVar);
-	this->setMemberValue("MyFloatVariable", floatVar);
-	this->setMemberValue("MyDoubleVariable", doubleVar);
-	this->setMemberArray("MyArray", intArray, 12);
+    this->setMemberValue("EmpId", intVar);
+	this->setMemberValue("IsHired", boolVar);
+	this->setMemberValue("GPA", floatVar);
+	this->setMemberValue("Salary", doubleVar);
+	this->setMemberArray("ContactNos", intArray, 12);
 	delete openedFile; //Close the file
 }
 
@@ -121,11 +121,11 @@ void SampleObject::Save(StandardFileSystem fs, const char* fileName)
 	double doubleVar;
 	int intArray[12];
 
-	this->getMemberValue("MyIntVariable", intVar);
-	this->getMemberValue("MyBoolVariable", boolVar);
-	this->getMemberValue("MyFloatVariable", floatVar);
-	this->getMemberValue("MyDoubleVariable", doubleVar);
-	this->getMemberArray("MyArray", intArray, 12);
+	this->getMemberValue("EmpId", intVar);
+	this->getMemberValue("IsHired", boolVar);
+	this->getMemberValue("GPA", floatVar);
+	this->getMemberValue("Salary", doubleVar);
+	this->getMemberArray("ContactNos", intArray, 12);
 
 	std::string objectValues = "";
 	objectValues += std::to_string(intVar); objectValues += "\n";

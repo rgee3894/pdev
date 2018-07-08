@@ -22,7 +22,7 @@ void fileSystemExample()
 {
 	std::cout << "FILE SYSTEM EXAMPLE" << std::endl;
 	std::cout << "======================================================" << std::endl;
-	StandardFileSystem* fs = new StandardFileSystem("C:\\Users\\Marl\\Documents\\PROSDEV\\pdev");
+	StandardFileSystem* fs = new StandardFileSystem("./");
 
 	// If newfile.txt exists, delete it
 	if (fs->fileExists("newfile.txt"))
@@ -134,7 +134,7 @@ void reflectionExample()
 	obj.doublevar = 3.0;
 	for (int i = 0; i < 12; i++)
 		obj.arrayvar[i] = i;
-
+    std::cout<< "Member variables before modification."<<std::endl;
 	// Print out variables
 	showVars(obj);
 
@@ -151,6 +151,8 @@ void reflectionExample()
 		tempArray[i] = 11 - i;
 	obj.setMemberArray("ContactNos", tempArray, 12);
 	// Print out variables
+
+	std::cout<< "Member variables after modification."<<std::endl;
 	showVars(obj);
 	std::cout << std::endl;
 
@@ -175,7 +177,7 @@ void archiveExample()
 	// Create/open a new archive file
 	{
 		Archive newArchive;
-		newArchive.openArchive("C:\\Users\\Marl\\Documents\\PROSDEV\\pdev");
+		newArchive.openArchive("./");
 		{
 			// Write "Hello Archive!" to test1.txt
 			const char fileContents[] = "Hello Archive!";
@@ -195,7 +197,7 @@ void archiveExample()
 	}
 	{
 		Archive archive;
-		archive.openArchive("C:\\Users\\Marl\\Documents\\PROSDEV\\pdev");
+		archive.openArchive("./");
 		// Read the written files
 
 		// Read "test1.txt"
